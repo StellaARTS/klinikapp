@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Pasien;
 use Illuminate\Support\Facades\Storage;
 
 class PasienController extends Controller
@@ -13,16 +12,16 @@ class PasienController extends Controller
      */
     public function index()
     {
-        $pasien = Pasien::latest()->paginate(10);
-        return view('pasien_index', compact('pasien'));
+        $pasien = \App\Models\Pasien::latest()->paginate (10);
+        $data['pasien'] = $pasien;
+        return view('pasien_index', $data);
     }
-
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        return view('pasien_create');
+         return view('pasien_create');
     }
 
     /**
@@ -30,13 +29,13 @@ class PasienController extends Controller
      */
     public function store(Request $request)
     {
-        $requestData = $request->validate([
+            $requestData = $request->validate([
             'no_pasien'     => 'required|unique:pasiens,no_pasien',
             'nama'          => 'required',
             'umur'          => 'required|numeric',
-            'jenis_kelamin' => 'required|in:laki-laki,perempuan',
+            'jenis_kelamin' => 'required|in:laki-laki,perem7puan',
             'alamat'        => 'nullable',
-            'foto'          => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'foto'          => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
         $pasien = new \App\Models\Pasien();
         $pasien->no_pasien = $requestData['no_pasien'];
@@ -52,14 +51,23 @@ class PasienController extends Controller
         $pasien->save();
         return redirect('/pasien')->with('pesan', 'Data sudah disimpan');
     }
+    //egg hire
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
 
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
-        $pasien = Pasien::findOrFail($id);
-        return view('pasien_edit', compact('pasien'));
+        $data['pasien'] = \App\Models\Pasien::findOrFail($id);
+    return view('pasien_edit', $data);
+
     }
 
     /**
@@ -67,13 +75,13 @@ class PasienController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $requestData = $request->validate([
+         $requestData = $request->validate([
             'no_pasien'     => 'required|unique:pasiens,no_pasien,' . $id,
             'nama'          => 'required|min:2',
             'umur'          => 'required|numeric',
             'jenis_kelamin' => 'required|in:laki-laki,perempuan',
             'alamat'        => 'nullable',
-            'foto'          => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'foto'          => 'nullable|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
         ]);
         $pasien = \App\Models\Pasien::findOrFail($id);
         $pasien->no_pasien = $requestData['no_pasien'];
@@ -94,17 +102,11 @@ class PasienController extends Controller
         return redirect('/pasien')->with('pesan', 'Data sudah diubah');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+        public function destroy(string $id)
     {
-        $pasien = Pasien::findOrFail($id);
-        if ($pasien->foto) {
-            Storage::delete('public/images/' . $pasien->foto);
-        }
+        $pasien = \App\Models\Pasien::findOrFail($id);
         $pasien->delete();
-
         return back()->with('pesan', 'Data sudah dihapus');
     }
+
 }

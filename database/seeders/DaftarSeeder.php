@@ -14,5 +14,4 @@ class DaftarSeeder extends Seeder
     {
         \App\Models\Daftar::factory(50)->create();
     }
-    
 }

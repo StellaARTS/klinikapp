@@ -3,31 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Daftar extends Model
+class Pasien extends Model
 {
     use HasFactory;
+    // Athaya
+    protected $guarded = [];
 
-    protected $casts = [
-        'tanggal_daftar' => 'date',
-    ];
-
-    /**
-     * Get the pasien associated with the daftar.
-     */
-    public function pasien(): BelongsTo
+    public function daftar(): HasMany
     {
-        return $this->belongsTo(Pasien::class);
-    }
-
-    /**
-     * Get the poli associated with the daftar.
-     */
-    public function poli(): BelongsTo
-    {
-        return $this->belongsTo(Poli::class);
+        return $this->hasMany(Daftar::class);
     }
 }
-
