@@ -1,17 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\StudentController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-Route::middleware(['auth'])->group(function() {
-    Route::resource('pasien', App\Http\Controllers\PasienController::class);
-    Route::resource('poli', App\Http\Controllers\PoliController::class);
-    Route::resource('daftar', App\Http\Controllers\DaftarController::class);
-});
+Route::get('/', [StudentController::class, 'index'])->name('student_index');
+Route::resource('student', StudentController::class);
+Route::post('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
